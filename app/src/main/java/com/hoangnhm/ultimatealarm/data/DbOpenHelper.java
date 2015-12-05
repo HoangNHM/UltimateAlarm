@@ -28,6 +28,20 @@ public class DbOpenHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { }
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.beginTransaction();
+        try {
+            //Uncomment line below if you want to enable foreign keys
+            //db.execSQL("PRAGMA foreign_keys=ON;");
+            db.execSQL(Db.AlarmsTable.DELETE_ENTRIES);
+            //create again
+            onCreate(db);
+            //Add other tables here
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
 
 }

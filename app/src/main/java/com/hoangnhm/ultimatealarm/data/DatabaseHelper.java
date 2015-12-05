@@ -5,10 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.hoangnhm.ultimatealarm.data.model.Alarm;
-
 import java.util.ArrayList;
 import java.util.Collection;
+
+import static com.hoangnhm.ultimatealarm.data.model.Alarm.*;
 
 public class DatabaseHelper {
 
@@ -22,28 +22,28 @@ public class DatabaseHelper {
         return mDb;
     }
 
-    public void setAlarms(final Collection<Alarm> newAlarms) {
+    public void setAlarms(final Collection<Item> newItems) {
         SQLiteDatabase db = mDb.getWritableDatabase();
-        for (Alarm alarm : newAlarms) {
-            ContentValues values = Db.AlarmsTable.toContentValues(alarm);
+        for (Item item : newItems) {
+            ContentValues values = Db.AlarmsTable.toContentValues(item);
             long newRowId;
             newRowId = db.insert(Db.AlarmsTable.TABLE_NAME, null, values); // null: not insert a row when there are no values
         }
 
     }
 
-    public ArrayList<Alarm> getAlarms() {
+    public ArrayList<Item> getAlarms() {
         SQLiteDatabase db = mDb.getReadableDatabase();
         Cursor cursor = db.rawQuery(Db.AlarmsTable.SELECT_ALL, null);
 
-        ArrayList<Alarm> alarms = new ArrayList<>();
+        ArrayList<Item> items = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            alarms.add(Db.AlarmsTable.parseCursor(cursor));
+            items.add(Db.AlarmsTable.parseCursor(cursor));
             cursor.moveToNext();
         }
 
-        return alarms;
+        return items;
     }
 
 //    /**
@@ -101,7 +101,7 @@ public class DatabaseHelper {
 //                });
 //    }
 //
-//    private void deleteAllRibotsApartFrom(Collection<Alarm> ribotsToKeep) {
+//    private void deleteAllRibotsApartFrom(Collection<Item> ribotsToKeep) {
 //        if (ribotsToKeep.isEmpty()) {
 //            mDb.delete(Db.RibotsTable.TABLE_NAME, null);
 //        } else {
